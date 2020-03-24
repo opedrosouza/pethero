@@ -1,0 +1,55 @@
+version: '3.7'
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    volumes:
+      - ./database:/var/lib/mysql
+    networks: 
+      - backend
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: pedro
+      MYSQL_PASSWORD: 123123
+    ports:
+      - 3306
+  api:
+    build: .
+    volumes:
+      - ./api:/api
+    ports:
+      - '3001:3000'
+    depends_on:
+      - db
+    networks: 
+      - backend
+    environment:
+      DB_NAME: pethero
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_PORT: 3306
+      DB_HOST: db
+      JWT_SECRET: 07e5355751185df6c4aa5487daa48d174ef37814c47f36588c9632c1a3ba7680a803d2a97dc84ad16adca0da9c0e7ebecb56e4fb54aa20160fbe2600ae7bde06
+      RAILS_ENV: development
+  # frontend:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile-angular
+  #   volumes: 
+  #     - ./frontend:/frontend
+  #   ports: 
+  #     - '80:80'
+  #   depends_on: 
+  #     - db
+  #     - api
+  #   networks: 
+  #     - frontend
+
+networks: 
+  backend:
+  # frontend:
+
+volumes:
+  database:
+  # frontend:
